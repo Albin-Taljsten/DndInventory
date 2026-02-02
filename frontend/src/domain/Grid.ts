@@ -1,6 +1,15 @@
+import type { InventoryItem } from "./InventoryItem";
 import * as types from "./Types";
 
+
+/**
+ * Represents the main inventory grid
+ * 
+ * @param width - Number of columns in the grid
+ * @param height - Number of rows in the grid
+ */
 export class Grid {
+
     public width: number;
     public height: number;
     private cells: types.Cell[][];
@@ -9,15 +18,124 @@ export class Grid {
         this.width = width;
         this.height = height;
         this.cells = Array.from({ length: width }, () =>
-            Array.from({ length: height }, () => types.emptyCell())
+            Array.from({ length: height }, () => types.typeHelper.emptyCell())
         );
     }
 
-    getCell(x: number, y: number): types.Cell {
-        return this.cells[x][y];
+    /**
+     * Gets a cell at the given coordinates
+     * @param point - A point created with newPoint(x, y)
+     * @returns The **Cell** with coordinates of **point**
+     */
+    getCell(point: types.Point): types.Cell {
+        return this.cells[point.x][point.y];
     }
 
-    setCell(x: number, y:number, value: types.Cell): void {
-        this.cells[x][y] = value
+    /**
+     * Sets a cell to a value of type **Cell**
+     * @param point - A point created with newPoint(x, y)
+     * @param value - A value with the typeof **Cell**, ex: types.typeHelper.occupiedCell("sword")
+     */
+    setCell(point: types.Point, value: types.Cell): void {
+        this.cells[point.x][point.y] = value
     }
+
+    /**
+     * Checks if item can be placed in a specific spot
+     * @param item - The item to be placed
+     * @param x - Horizontal position to start checking
+     * @param y - Vertical position to start checking
+     * @returns **True** or **False**
+     */
+    canPlaceItem(item: InventoryItem, point: types.Point): boolean {
+        const shape = item.shape;
+        for (let posX = 0; posX < shape.length; posX++) {
+            for (let posY = 0; posY < shape[posX].length; posY++) {
+                // Only checks spots that are true in the shape
+                //**
+                // Example: (T = true and . = false)
+                // T T T
+                // T T T
+                // . T .
+                //
+                // Every T gets called but not the .'s
+                //  */
+                if (!shape[posX][posY]) continue;
+
+                // Out of bounds check (if item is trying to be placed outside the grid)
+                if (point.x + posX >= this.width || point.y + posY >= this.height) {
+                    return false;
+                }
+
+                // Checks that all cells are empty where the item is to be placed if not returns false
+                if (this.getCell(types.typeHelper.newPoint(point.x + posX, point.y + posY)).kind !== "empty") {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Places an item into the grid
+     * @param item - Item to place into the grid
+     * @param point - The point where the item will be placed into the grid
+     * @returns **False** if item can't be placed, **True** otherwise
+     */
+    placeItem(item: InventoryItem, point: types.Point): boolean {
+        if(!this.canPlaceItem(item, point)) return false;
+
+        for (let posX = 0; posX < item.shape.length; posX++) {
+            for (let posY = 0; posY < item.shape[posX].length; posY++) {
+                if (item.shape[posX][posY]) {
+                    this.setCell(types.typeHelper.newPoint(point.x + posX, point.y + posY), { kind: "occupied", itemId: item.id});
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Removes an existing item in the grid
+     * @param item - Item to remove from the grid
+     * @param point - Point where the item is in the grid
+     */
+    removeItem(item: InventoryItem, point: types.Point): void {
+        for (let posX = 0; posX < item.shape.length; posX++) {
+            for (let posY = 0; posY < item.shape[posX].length; posY++) {
+                if (item.shape[posX][posY]) {
+                    this.setCell(types.typeHelper.newPoint(point.x + posX, point.y + posY), { kind: "empty"});
+                }
+            }
+        }
+    }
+
+    /**
+     * Rotates an item 90 degrees in the clockwise direction
+     * @param shape - The shape to rotate usually **item.shape**
+     * @returns Resulting shape after getting rotated
+     */
+    static rotateShape(shape: types.Shape): types.Shape {
+        const width = shape.length;
+        const height = shape[0].length;
+        const result: types.Shape = Array.from({ length: height }, () => [])
+
+        for (let x = 0; x < width; x++) {
+            for (let y = 0; y < height; y++) {
+                result[y][width - 1 - x] = shape[x][y];
+            }
+        }
+        return result;
+    }
+}
+
+export function test(): void
+{
+    const grid = new Grid(10, 10);
+
+    grid.setCell(types.typeHelper.newPoint(3, 3), types.typeHelper.occupiedCell("sword"))
+
+    const test = grid.getCell(types.typeHelper.newPoint(3, 3));
+
+    console.log(test);
 }
