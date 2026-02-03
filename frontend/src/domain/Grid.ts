@@ -1,5 +1,5 @@
-import type { InventoryItem } from "./InventoryItem";
-import * as types from "./Types";
+import { InventoryItem } from "./InventoryItem";
+import { typeHelper, type Point, type Cell, type Shape } from "./Types";
 
 
 /**
@@ -12,13 +12,13 @@ export class Grid {
 
     public width: number;
     public height: number;
-    private cells: types.Cell[][];
+    private cells: Cell[][];
 
     constructor(width: number, height: number) {
         this.width = width;
         this.height = height;
         this.cells = Array.from({ length: width }, () =>
-            Array.from({ length: height }, () => types.typeHelper.emptyCell())
+            Array.from({ length: height }, () => typeHelper.emptyCell())
         );
     }
 
@@ -27,7 +27,7 @@ export class Grid {
      * @param point - A point created with newPoint(x, y)
      * @returns The **Cell** with coordinates of **point**
      */
-    getCell(point: types.Point): types.Cell {
+    getCell(point: Point): Cell {
         return this.cells[point.x][point.y];
     }
 
@@ -36,7 +36,7 @@ export class Grid {
      * @param point - A point created with newPoint(x, y)
      * @param value - A value with the typeof **Cell**, ex: types.typeHelper.occupiedCell("sword")
      */
-    setCell(point: types.Point, value: types.Cell): void {
+    setCell(point: Point, value: Cell): void {
         this.cells[point.x][point.y] = value
     }
 
@@ -47,7 +47,7 @@ export class Grid {
      * @param y - Vertical position to start checking
      * @returns **True** or **False**
      */
-    canPlaceItem(item: InventoryItem, point: types.Point): boolean {
+    canPlace(item: InventoryItem, point: Point): boolean {
         const shape = item.shape;
         for (let posX = 0; posX < shape.length; posX++) {
             for (let posY = 0; posY < shape[posX].length; posY++) {
@@ -68,7 +68,7 @@ export class Grid {
                 }
 
                 // Checks that all cells are empty where the item is to be placed if not returns false
-                if (this.getCell(types.typeHelper.newPoint(point.x + posX, point.y + posY)).kind !== "empty") {
+                if (this.getCell(typeHelper.newPoint(point.x + posX, point.y + posY)).kind !== "empty") {
                     return false;
                 }
             }
@@ -82,13 +82,13 @@ export class Grid {
      * @param point - The point where the item will be placed into the grid
      * @returns **False** if item can't be placed, **True** otherwise
      */
-    placeItem(item: InventoryItem, point: types.Point): boolean {
-        if(!this.canPlaceItem(item, point)) return false;
+    place(item: InventoryItem, point: Point): boolean {
+        if(!this.canPlace(item, point)) return false;
 
         for (let posX = 0; posX < item.shape.length; posX++) {
             for (let posY = 0; posY < item.shape[posX].length; posY++) {
                 if (item.shape[posX][posY]) {
-                    this.setCell(types.typeHelper.newPoint(point.x + posX, point.y + posY), { kind: "occupied", itemId: item.id});
+                    this.setCell(typeHelper.newPoint(point.x + posX, point.y + posY), { kind: "occupied", itemId: item.id});
                 }
             }
         }
@@ -100,11 +100,16 @@ export class Grid {
      * @param item - Item to remove from the grid
      * @param point - Point where the item is in the grid
      */
-    removeItem(item: InventoryItem, point: types.Point): void {
-        for (let posX = 0; posX < item.shape.length; posX++) {
-            for (let posY = 0; posY < item.shape[posX].length; posY++) {
-                if (item.shape[posX][posY]) {
-                    this.setCell(types.typeHelper.newPoint(point.x + posX, point.y + posY), { kind: "empty"});
+    remove(item: InventoryItem): void {
+        const idToRemove = item.id;
+
+        for (let x = 0; x < this.width; x++) {
+            for (let y = 0; y < this.height; y++) {
+                const cell = this.getCell(typeHelper.newPoint(x, y));
+
+                // If this cell belongs to the item, clear it
+                if (cell.kind === "occupied" && cell.itemId === idToRemove) {
+                    this.setCell(typeHelper.newPoint(x, y), { kind: "empty" });
                 }
             }
         }
@@ -115,10 +120,10 @@ export class Grid {
      * @param shape - The shape to rotate usually **item.shape**
      * @returns Resulting shape after getting rotated
      */
-    static rotateShape(shape: types.Shape): types.Shape {
+    static rotateShape(shape: Shape): Shape {
         const width = shape.length;
         const height = shape[0].length;
-        const result: types.Shape = Array.from({ length: height }, () => [])
+        const result: Shape = Array.from({ length: height }, () => [])
 
         for (let x = 0; x < width; x++) {
             for (let y = 0; y < height; y++) {
@@ -127,15 +132,10 @@ export class Grid {
         }
         return result;
     }
-}
 
-export function test(): void
-{
-    const grid = new Grid(10, 10);
+    // Helper methods
 
-    grid.setCell(types.typeHelper.newPoint(3, 3), types.typeHelper.occupiedCell("sword"))
-
-    const test = grid.getCell(types.typeHelper.newPoint(3, 3));
-
-    console.log(test);
+    as2DArray(): Cell[][] {
+        return this.cells
+    }
 }
