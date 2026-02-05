@@ -1,5 +1,5 @@
 import { InventoryItem } from "./InventoryItem";
-import { typeHelper, type Point, type Cell, type Shape } from "./Types";
+import { typeHelper, type Point, type Cell, type Shape, newPoint } from "./Types";
 
 
 /**
@@ -68,7 +68,7 @@ export class Grid {
                 }
 
                 // Checks that all cells are empty where the item is to be placed if not returns false
-                if (this.getCell(typeHelper.newPoint(point.x + posX, point.y + posY)).kind !== "empty") {
+                if (this.getCell(newPoint(point.x + posX, point.y + posY)).kind !== "empty") {
                     return false;
                 }
             }
@@ -88,7 +88,7 @@ export class Grid {
         for (let posX = 0; posX < item.shape.length; posX++) {
             for (let posY = 0; posY < item.shape[posX].length; posY++) {
                 if (item.shape[posX][posY]) {
-                    this.setCell(typeHelper.newPoint(point.x + posX, point.y + posY), { kind: "occupied", itemId: item.id});
+                    this.setCell(newPoint(point.x + posX, point.y + posY), { kind: "occupied", itemId: item.id});
                 }
             }
         }
@@ -96,22 +96,12 @@ export class Grid {
     }
 
     /**
-     * Removes an existing item in the grid
-     * @param item - Item to remove from the grid
-     * @param point - Point where the item is in the grid
+     * Removes a list of points from the grid
+     * @param cells 
      */
-    remove(item: InventoryItem): void {
-        const idToRemove = item.id;
-
-        for (let x = 0; x < this.width; x++) {
-            for (let y = 0; y < this.height; y++) {
-                const cell = this.getCell(typeHelper.newPoint(x, y));
-
-                // If this cell belongs to the item, clear it
-                if (cell.kind === "occupied" && cell.itemId === idToRemove) {
-                    this.setCell(typeHelper.newPoint(x, y), { kind: "empty" });
-                }
-            }
+    removeCells(cells: Point[]): void {
+        for (const p of cells) {
+            this.setCell(p, { kind: "empty" });
         }
     }
 

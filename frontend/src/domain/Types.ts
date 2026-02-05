@@ -1,3 +1,5 @@
+import type { InventoryItem } from "./InventoryItem";
+
 // Type for a cell in the Grid
 export type Cell = 
     | { kind: "empty"}
@@ -9,7 +11,7 @@ export type Shape = boolean[][];
 // Type for a point (2D vector)
 export type Point = {x: number, y: number}
 
-
+//||===================================================||
 type JsonPrimitive = string | number | boolean | null;
 type JsonArray = JsonValue[];
 type JsonObject = { [key: string]: JsonValue };
@@ -19,6 +21,24 @@ type JsonObject = { [key: string]: JsonValue };
  * @deprecated FOR NOW
  */
 export type JsonValue = JsonPrimitive | JsonObject | JsonArray;
+
+// Type for placed item metadata
+export type PlacedItem = {
+    item: InventoryItem;
+    origin: Point;
+    rotation: number;
+    occupiedCells: Point[];
+}
+
+// Type for the state that the Inventory has
+export type InventoryState = {
+    placements: {
+        id: string;         // Unique item ID
+        origin: Point;      // Where it was placed
+        rotation: number;   // Item rotation
+    }[];
+}
+
 
 // Helper class for types
 
@@ -33,11 +53,13 @@ export class typeHelper{
     public static occupiedCell(itemId: string): Cell {
         return { kind: "occupied", itemId };
     }
+}
 
-    // Helper function(s) for "Point" type
+// Helper function for functions that get used often
 
-    public static newPoint(x:number, y:number): Point
-    {
-        return {x, y}
-    }
+// Helper function(s) for "Point" type
+
+export function newPoint(x:number, y:number): Point
+{
+    return {x, y};
 }
