@@ -1,6 +1,6 @@
 import { Inventory } from "./Inventory";
 import { InventoryItem } from "./InventoryItem";
-import { typeHelper } from "./Types";
+import { newPoint } from "./Types";
 
 export { Grid } from "./Grid";
 export { InventoryItem } from "./InventoryItem"
@@ -28,9 +28,9 @@ export function test() {
         [true, true],
     ]);
 
-    inventory.addItem(item1, typeHelper.newPoint(0, 0));
-    inventory.addItem(item2, typeHelper.newPoint(6, 0));
-    inventory.addItem(item3, typeHelper.newPoint(12, 0));
+    inventory.addItem(item1, newPoint(0, 0));
+    inventory.addItem(item2, newPoint(6, 0));
+    inventory.addItem(item3, newPoint(12, 0));
 
     console.log(inventory.getGridSnapshot());
 }
