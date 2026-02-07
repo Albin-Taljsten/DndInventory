@@ -33,4 +33,6 @@ export function test() {
     inventory.addItem(item3, newPoint(12, 0));
 
     console.log(inventory.getGridSnapshot());
+
+    console.log(inventory.serialize());
 }

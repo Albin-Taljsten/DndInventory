@@ -3,7 +3,7 @@ import type { InventoryItem } from "./InventoryItem";
 // Type for a cell in the Grid
 export type Cell = 
     | { kind: "empty"}
-    | { kind: "occupied"; itemId: string };
+    | { kind: "occupied"; itemId: string; };
 
 // Type for a shape in the Grid
 export type Shape = boolean[][];
