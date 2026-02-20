@@ -1,27 +1,26 @@
-import type { FC } from "react";
+import type { Inventory } from "../../domain/Inventory";
 import type { Cell } from "../../domain/Types";
-import "../../scss/components/InventoryGrid.scss"
+import "../../scss/components/InventoryGrid.scss";
 
-type Props = {
+interface InventoryGridProps {
     grid: Cell[][];
-    onCellClick?: (x: number, y: number) => void;
-};
+    inventory: Inventory
+}
 
-const InventoryGrid: FC<Props> = ({ grid, onCellClick }) => {
+const InventoryGrid: React.FC<InventoryGridProps> = ({ grid }) => {
     return (
         <div className="inventory-grid">
-            {grid.map((column, x) => 
-                column.map((cell, y) => (
-                    <div
-                        key={`${x}-${y}`}
-                        className={`cell ${cell.kind === "empty" ? "empty" : "occupied"}`}
-                        onClick={() => onCellClick && onCellClick(x, y)}
-                    >
-                        {/* Optionally show item ID, icon, or rotation */}
-                        {cell.kind === "occupied" ? cell.itemId : null}
-                    </div>
-                ))
-            )}
+            {grid[0].map((_, y) => (
+                <div key={y} className="inventory-row">
+                    {grid.map((column, x) => {
+                        const cell = column[y];
+                        const className = 
+                            cell.kind === "empty" ? "cell empty" : "cell occupied";
+
+                        return <div key={x} className={className}></div>;
+                    })}
+                </div>
+            ))}
         </div>
     );
 };

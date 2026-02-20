@@ -1,3 +1,4 @@
+import type { Inventory } from "./Inventory";
 import type { InventoryItem } from "./InventoryItem";
 
 // Type for a cell in the Grid
@@ -38,6 +39,8 @@ export type InventoryState = {
         rotation: number;   // Item rotation
     }[];
 }
+
+export type InventoryListener = (inventory: Inventory) => void;
 
 
 // Helper class for types

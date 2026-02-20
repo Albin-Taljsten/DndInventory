@@ -28,6 +28,9 @@ export class Grid {
      * @returns The **Cell** with coordinates of **point**
      */
     getCell(point: Point): Cell {
+        // Out of bounds check
+        if (!this.isInside(point)) throw new Error(`Out of bounds: ${point.x}, ${point.y}`);
+
         return this.cells[point.x][point.y];
     }
 
@@ -37,7 +40,10 @@ export class Grid {
      * @param value - A value with the typeof **Cell**, ex: types.typeHelper.occupiedCell("sword")
      */
     setCell(point: Point, value: Cell): void {
-        this.cells[point.x][point.y] = value
+        // Out of bounds check
+        if (!this.isInside(point)) throw new Error(`Out of bounds: ${point.x}, ${point.y}`);
+
+        this.cells[point.x][point.y] = value;
     }
 
     /**
@@ -123,9 +129,39 @@ export class Grid {
         return result;
     }
 
+    /**
+     * @returns Returns a shallow copy of the grid
+     */
+    as2DArray(): Cell[][] {
+        return this.cells.map(column => column.slice());
+    }
+
     // Helper methods
 
-    as2DArray(): Cell[][] {
-        return this.cells
+    isInside(point: Point): boolean {
+        return (
+            point.x >= 0 &&
+            point.y >= 0 &&
+            point.x < this.width &&
+            point.y < this.height
+        );
+    }
+
+    clear(): void {
+        for (let x = 0; x < this.width; x++) {
+            for (let y = 0; y < this.height; y++) {
+                this.cells[x][y] = typeHelper.emptyCell();
+            }
+        }
+    }
+
+    debugPrint(): void {
+        for (let y = 0; y < this.height; y++) {
+            let row = "";
+            for (let x = 0; x < this.width; x++) {
+                row += this.cells[x][y].kind === "empty" ? " . " : "#";
+            }
+            console.log(row);
+        }
     }
 }

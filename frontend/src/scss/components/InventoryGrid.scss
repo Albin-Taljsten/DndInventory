@@ -1,29 +1,28 @@
 .inventory-grid {
-    
-    --cols: 5;
-    display: grid;
-    grid-template-columns: repeat(var(--cols), 64px);
-    grid-auto-rows: 64px;
-    gap: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--inventory-cell-gap); // space between rows
+}
 
+.inventory-row {
+    display: flex;
+    gap: var(--inventory-cell-gap); // space between cells
+}
+
+.cell {
+    width: var(--inventory-cell-size);
+    height: var(--inventory-cell-size);
+    border: 1px solid #555;
+    display: flex;
+    align-items: center;
     justify-content: center;
-    align-content: start;
+}
 
-    .cell {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.85rem;
-        color: white;
+.cell.empty {
+    background-color: var(--inventory-empty-color);
+}
 
-        &.empty {
-            background-color: #1a1a1a;
-            border: 1px solid #333;
-        }
-
-        &.occupied {
-            background-color: #4a90e2;
-            border: 1px solid #2a6db0;
-        }
-    }
+.cell.occupied {
+    background-color: var(--inventory-occupied-color);
 }
