@@ -1,9 +1,12 @@
 .inventory-page {
-    position: absolute;
+    display: flex;
+    flex-direction: column;
     width: 100%;
     height: fit-content;
     background-color: #606060;
     padding-bottom: 2rem;
+    justify-content: center;
+    align-items: center;
 }
 
 .inventory-title {

@@ -4,7 +4,7 @@ import type { InventoryItem } from "./InventoryItem";
 // Type for a cell in the Grid
 export type Cell = 
     | { kind: "empty"}
-    | { kind: "occupied"; itemId: string; };
+    | { kind: "occupied"; itemId: number; };
 
 // Type for a shape in the Grid
 export type Shape = boolean[][];
@@ -34,7 +34,8 @@ export type PlacedItem = {
 // Type for the state that the Inventory has
 export type InventoryState = {
     placements: {
-        id: string;         // Unique item ID
+        id: number;         // Instance id
+        itemId: string;     // Unique item id ex: "sword_1", "halbered_ancient" etc.
         origin: Point;      // Where it was placed
         rotation: number;   // Item rotation
     }[];
@@ -53,7 +54,7 @@ export class typeHelper{
         return { kind: "empty" };
     }
 
-    public static occupiedCell(itemId: string): Cell {
+    public static occupiedCell(itemId: number): Cell {
         return { kind: "occupied", itemId };
     }
 }

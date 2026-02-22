@@ -1,17 +1,23 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { test } from './domain'
-import Inventory from "./ui/pages/InventoryPage";
+import InventoryPage from "./ui/pages/InventoryPage";
+import LoginPage from './ui/pages/LoginPage';
+import ProtectedRoute from './ui/components/protectedRoute';
 
 
 function App() {
-
-    test();
-
+    // AuthContext exists around the app right now
     return (
         <BrowserRouter>
             <Routes>
-                <Route path='/' />
-                <Route path='/inventory' element={<Inventory />} />
+                <Route path='/' element={<LoginPage />}/>
+                <Route 
+                    path='/inventory' 
+                    element={
+                        <ProtectedRoute>
+                            <InventoryPage />
+                        </ProtectedRoute>
+                    }
+                />
             </Routes>
         </BrowserRouter>
     );

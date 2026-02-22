@@ -1,11 +1,13 @@
 import { Grid } from "./Grid";
-import type { InventoryItem } from "./InventoryItem";
+import { InventoryItem } from "./InventoryItem";
 import { newPoint, type Cell, type InventoryListener, type InventoryState, type PlacedItem, type Point } from "./Types";
 import { computeOccupiedCells } from "./utils";
 
 export class Inventory {
+    private nextId = 0;
+
     private grid: Grid;
-    private placements: Map<string, PlacedItem>;
+    private placements: Map<number, PlacedItem>;
 
     private listeners: Set<InventoryListener> = new Set();
 
@@ -67,6 +69,10 @@ export class Inventory {
         }
     }
 
+    createItem(itemId: string): InventoryItem {
+        return new InventoryItem(this.nextId++, itemId);
+    }
+
     /**
      * Adds an item into the inventory
      * @param item - The item to add
@@ -96,7 +102,7 @@ export class Inventory {
      * Removes an item from the inventory
      * @param itemId - The id of the item to be removed
      */
-    removeItem(itemId: string): void {
+    removeItem(itemId: number): void {
         const placement = this.placements.get(itemId);
         if (!placement) return;
 
@@ -113,7 +119,7 @@ export class Inventory {
      * @param newPoint - The new point of the moved item
      * @returns True if item got moved or tried to be moved, False if item doesn't exist
      */
-    moveItem(itemId: string, newOrigin: Point): boolean {
+    moveItem(itemId: number, newOrigin: Point): boolean {
         const placement = this.placements.get(itemId);
         if (!placement) return false;
 
@@ -163,10 +169,37 @@ export class Inventory {
         return {
             placements: Array.from(this.placements.values()).map(p => ({
                 id: p.item.id,
+                itemId: p.item.itemId,
                 origin: p.origin,
                 rotation: p.rotation,
             })),
         };
+    }
+
+    deserialize(state: InventoryState) {
+        // Clear existing inventory
+        this.clear();
+
+        let maxId = -1;
+
+        for (const p of state.placements) {
+            const item = new InventoryItem(p.id, p.itemId);
+
+            maxId = Math.max(maxId, item.id);
+
+            this.placements.set(item.id, {
+                item,
+                origin: p.origin,
+                rotation: p.rotation,
+                occupiedCells: computeOccupiedCells(item.shape, p.origin),
+            });
+
+            this.grid.place(item, p.origin);
+        }
+
+        this.nextId = maxId + 1;
+
+        this.notify();
     }
 
     /**
@@ -177,9 +210,14 @@ export class Inventory {
         return this.grid.as2DArray();
     }
 
+    getPlacements(): PlacedItem[] {
+        return Array.from(this.placements.values());
+    }
+
     clear(): void {
         this.grid.clear();
         this.placements.clear();
+        this.nextId = 0;
         this.notify();
     }
 

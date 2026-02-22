@@ -11,6 +11,11 @@ router.post("/save", async (req, res) => {
         const result = await pool.query(
             `INSERT INTO inventories (user_id, width, height, data)
              VALUES ($1, $2, $3, $4)
+             ON CONFLICT (user_id)
+             DO UPDATE SET width = EXCLUDED.width,
+                           height = EXCLUDED.height,
+                           data = EXCLUDED.data,
+                           updated_at = NOW()
              RETURNING *`,
             [userId, width, height, data]
         );
@@ -32,7 +37,11 @@ router.get("/:userId", async (req, res) => {
             [userId]
         );
 
-        res.json(result.rows);
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: "No inventory found for this user" });
+        }
+
+        res.json(result.rows[0] ?? null);
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: "Failed to load inventory" });
