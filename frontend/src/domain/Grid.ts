@@ -129,6 +129,14 @@ export class Grid {
         return result;
     }
 
+    setWidth(value: number): void {
+        this.width = value;
+    }
+
+    setHeight(value: number): void {
+        this.height = value;
+    }
+
     /**
      * @returns Returns a shallow copy of the grid
      */

@@ -17,7 +17,7 @@ const SaveInventoryButton: React.FC<Props> = ({ inventory, userId }) => {
             alert("Failed to save inventory");
         }
     };
-    return <button onClick={handleSave}>Save Inventory</button>;
+    return <button className="btn btn--sm" onClick={handleSave}>Save Inventory</button>;
 };
 
 export default SaveInventoryButton;

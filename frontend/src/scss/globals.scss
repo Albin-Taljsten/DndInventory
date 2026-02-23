@@ -1,8 +1,10 @@
 :root {
     --inventory-cell-size: 96px;
-    --inventory-cell-gap: 2px;
     --inventory-empty-color: #222;
     --inventory-occupied-color: #999;
     --inventory-width: 5;
     --inventory-height: 10;
+    --font-sans: system-ui, -apple-system, BlinkMacSystemFont,
+               "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell,
+               "Helvetica Neue", Arial, sans-serif;
 }

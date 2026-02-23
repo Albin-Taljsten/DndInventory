@@ -1,0 +1,33 @@
+.login-page {
+    width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #606060;
+
+    .login-page-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        width: 100%;
+        max-width: 256px;
+
+        h2 {
+            color: whitesmoke;
+            margin: 1rem 0;
+        }
+
+        input {
+            width: 100%;
+            margin: 1rem 0;
+        }
+
+        button {
+            width: 100%;
+            margin: 0.75rem 0;
+        }
+    }
+}

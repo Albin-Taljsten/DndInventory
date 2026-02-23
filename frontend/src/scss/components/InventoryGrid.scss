@@ -1,14 +1,20 @@
+.inventory-grid-wrapper {
+    overflow-y: auto; // vertical scroll
+    overflow-x: hidden; // optional: prevent horizontal scroll
+    width: calc(var(--inventory-cell-size) * var(--inventory-width));
+    border: 1px solid #444; // optional: visual boundary
+    padding: 0; // optional padding around grid
+    box-sizing: content-box;
+}
+
 .inventory-grid {
     display: flex;
     flex-direction: column;
-    position: relative;
-    height: fit-content;
-    width: fit-content;
+    width: 100%;
 }
 
 .inventory-row {
     display: flex;
-    //gap: var(--inventory-cell-gap); // space between cells
 }
 
 .cell {

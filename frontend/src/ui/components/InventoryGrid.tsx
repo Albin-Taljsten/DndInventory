@@ -1,27 +1,37 @@
 import type { Inventory } from "../../domain/Inventory";
 import { newPoint, type Cell, type PlacedItem } from "../../domain/Types";
 import "../../scss/components/InventoryGrid.scss";
-import InventoryItem from "./InventoryItem";
 
 interface InventoryGridProps {
     grid: Cell[][];
     inventory: Inventory;
     placements: PlacedItem[];
+    mode: "add" | "remove" | "move";
 }
 
-const InventoryGrid: React.FC<InventoryGridProps> = ({ grid, inventory, placements }) => {
+const InventoryGrid: React.FC<InventoryGridProps> = ({ grid, inventory, placements, mode }) => {
 
     function handleCellClick(x: number, y: number) {
         const cell = grid[x][y];
 
-        if (cell.kind === "occupied") return;
+        if (mode === "add") {
+            if (cell.kind === "occupied") return;
+            const item = inventory.createItem("sword");
+            const success = inventory.addItem(item, newPoint(x, y))
+            if (!success) console.log("Cannot place item at", x, y);
+        }
 
-        const item = inventory.createItem("sword");
+        if (mode === "remove") {
+            if (cell.kind === "empty") return;
+            const placementToRemove = placements.find(
+                p => p.occupiedCells.some(c => c.x === x && c.y === y)
+            );
 
-        const success = inventory.addItem(item, newPoint(x, y))
+            if (placementToRemove) inventory.removeItem(placementToRemove.item.id);
+        }
 
-        if (!success) {
-            console.log("Cannot place item at", x, y);
+        if (mode === "move") {
+            // Handle this when drag and drop is possible
         }
     }
 
@@ -44,14 +54,14 @@ const InventoryGrid: React.FC<InventoryGridProps> = ({ grid, inventory, placemen
                         })}
                     </div>
                 ))}
-
+                
                 {/* New overlay items */}
-                {placements.map(placement => (
+                {/*placements.map(placement => (
                     <InventoryItem
                         key={placement.item.id}
                         placement={placement}
                     />
-                ))}
+                ))*/}
             </div>
     );
 };

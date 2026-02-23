@@ -202,6 +202,16 @@ export class Inventory {
         this.notify();
     }
 
+    setWidth(value: number) {
+        this.grid.setWidth(value);
+        this.notify();
+    }
+
+    setHeight(value: number) {
+        this.grid.setHeight(value);
+        this.notify();
+    }
+
     /**
      * A snapshot of the grid used for debugging etc.
      * @returns 2DArray of the Grid

@@ -1,0 +1,136 @@
+@use "sass:color";
+
+// ===== Variables =====
+$btn-bg: #4f46e5;
+$btn-bg-hover: #4338ca;
+$btn-bg-active: #3730a3;
+$btn-text: #ffffff;
+$btn-radius: 12px;
+$btn-padding-y: 0.75rem;
+$btn-padding-x: 1.5rem;
+$btn-font-weight: 600;
+$btn-transition: 0.2s ease;
+
+// ===== Base Button =====
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+
+  padding: $btn-padding-y $btn-padding-x;
+  border-radius: $btn-radius;
+  border: none;
+
+  font-weight: $btn-font-weight;
+  font-size: 1rem;
+  color: $btn-text;
+
+  background: linear-gradient(
+    135deg,
+    color.adjust($btn-bg, $lightness: 5%),
+    $btn-bg
+  );
+
+  cursor: pointer;
+  transition: all $btn-transition;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+
+  &:hover {
+    background: linear-gradient(
+      135deg,
+      color.adjust($btn-bg-hover, $lightness: 5%),
+      $btn-bg-hover
+    );
+
+    transform: translateY(-2px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+  }
+
+  &:active {
+    transform: translateY(0);
+    background: $btn-bg-active;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  &:focus-visible {
+    outline: 3px solid color.adjust($btn-bg, $alpha: -0.6);
+    outline-offset: 3px;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+  }
+
+  // Secondary
+  &--secondary {
+    background: linear-gradient(
+      135deg,
+      color.adjust(#f3f4f6, $lightness: 3%),
+      #f3f4f6
+    );
+    color: #111827;
+
+    &:hover {
+      background: #e5e7eb;
+    }
+  }
+
+  // Danger
+  &--danger {
+    background: linear-gradient(
+      135deg,
+      color.adjust(#ef4444, $lightness: 5%),
+      #ef4444
+    );
+
+    &:hover {
+      background: #dc2626;
+    }
+  }
+
+  // Outline
+  &--outline {
+    background: transparent;
+    border: 2px solid $btn-bg;
+    color: $btn-bg;
+    box-shadow: none;
+
+    &:hover {
+      background: color.adjust($btn-bg, $alpha: -0.92);
+    }
+  }
+
+  // Sizes
+  &--sm {
+    font-size: 0.875rem;
+    padding: 0.5rem 1rem;
+  }
+
+  &--lg {
+    font-size: 1.125rem;
+    padding: 1rem 2rem;
+  }
+
+  &--muted {
+    background: #e5e7eb !important;
+    color: #6b7280;
+    box-shadow: none;
+    transform: none;
+
+    &:hover {
+      background: #d1d5db !important;
+      box-shadow: none;
+      transform: none;
+    }
+
+    &:active {
+      background: #d1d5db !important;
+      box-shadow: none;
+      transform: none;
+    }
+  }
+}

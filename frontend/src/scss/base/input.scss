@@ -1,0 +1,96 @@
+@use "sass:color";
+
+// ===== Variables (reuse button vars if already defined) =====
+$input-bg: #ffffff;
+$input-border: #e5e7eb;
+$input-border-focus: #4f46e5;
+$input-text: #111827;
+$input-placeholder: #9ca3af;
+$input-radius: 12px;
+$input-padding-y: 0.75rem;
+$input-padding-x: 1rem;
+$input-transition: 0.2s ease;
+
+// ===== Base Input =====
+.input {
+  display: block;
+  width: 100%;
+
+  padding: $input-padding-y $input-padding-x;
+  border-radius: $input-radius;
+  border: 1px solid $input-border;
+
+  font-size: 1rem;
+  font-weight: 500;
+  color: $input-text;
+  background: linear-gradient(
+    135deg,
+    color.adjust($input-bg, $lightness: 2%),
+    $input-bg
+  );
+
+  transition: all $input-transition;
+  outline: none;
+
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+
+  &::placeholder {
+    color: $input-placeholder;
+  }
+
+  // Hover
+  &:hover {
+    border-color: color.adjust($input-border-focus, $alpha: -0.5);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.06);
+  }
+
+  // Focus
+  &:focus {
+    border-color: $input-border-focus;
+
+    box-shadow:
+      0 0 0 3px color.adjust($input-border-focus, $alpha: -0.75),
+      0 8px 20px rgba(0, 0, 0, 0.08);
+
+    transform: translateY(-1px);
+  }
+
+  // Disabled
+  &:disabled {
+    background: #f9fafb;
+    cursor: not-allowed;
+    opacity: 0.7;
+    box-shadow: none;
+  }
+
+  // Error state
+  &--error {
+    border-color: #ef4444;
+
+    &:focus {
+      box-shadow:
+        0 0 0 3px color.adjust(#ef4444, $alpha: -0.75);
+    }
+  }
+
+  // Success state
+  &--success {
+    border-color: #22c55e;
+
+    &:focus {
+      box-shadow:
+        0 0 0 3px color.adjust(#22c55e, $alpha: -0.75);
+    }
+  }
+
+  // Sizes
+  &--sm {
+    font-size: 0.875rem;
+    padding: 0.5rem 0.75rem;
+  }
+
+  &--lg {
+    font-size: 1.125rem;
+    padding: 1rem 1.25rem;
+  }
+}

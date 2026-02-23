@@ -17,7 +17,7 @@ const LoadInventoryButton: React.FC<Props> = ({ inventory, userId }) => {
         }
     };
     
-    return <button onClick={handleLoad}>Load Inventory</button>;
+    return <button className="btn btn--sm" onClick={handleLoad}>Load Inventory</button>;
 };
 
 export default LoadInventoryButton;

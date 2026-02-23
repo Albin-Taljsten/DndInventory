@@ -1,0 +1,12 @@
+.inventory-button-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: calc(var(--inventory-cell-size) * var(--inventory-width));
+
+    button {
+        width: 50%;
+        margin-bottom: 0.5rem;
+    }
+}

@@ -8,8 +8,8 @@ export async function load(userId: number, inventory: Inventory) {
 
     if (!res.data) return;
 
-    setGRID_WIDTH(res.data.width);
-    setGRID_HEIGHT(res.data.height);
+    setGRID_WIDTH(res.data.width, inventory);
+    setGRID_HEIGHT(res.data.height, inventory);
 
     inventory.deserialize(res.data.data);
 }
