@@ -2,36 +2,23 @@ import type React from "react";
 import "../../scss/components/InventoryToolbar.scss";
 
 interface InventoryToolbarProps {
-    mode: "add" | "remove" | "move";
-    setMode: (mode: "add" | "remove" | "move") => void;
+    mode: "none" | "remove";
+    setMode: (mode: "none" | "remove") => void;
 }
 
 const InventoryToolbar: React.FC<InventoryToolbarProps> = ({ mode, setMode }) => {
+
+    const toggleRemove = () => {
+        setMode(mode == "remove" ? "none" : "remove");
+    };
+
     return (
         <div className="inventory-toolbar">
             <button
-                className={`btn btn--sm ${mode === "add" ? "" : "btn--muted"}`}
-                onClick={() => setMode("add")}
-                style={{
-                    marginRight: "0.5rem"
-                }}
-            >
-                Add
-            </button>
-            <button
                 className={`btn btn--sm ${mode === "remove" ? "" : "btn--muted"}`}
-                onClick={() => setMode("remove")}
+                onClick={toggleRemove}
             >
                 Remove
-            </button>
-            <button
-                className={`btn btn--sm ${mode === "move" ? "" : "btn--muted"}`}
-                style={{
-                    marginLeft: "0.5rem"
-                }}
-                onClick={() => setMode("move")}
-            >
-                Move
             </button>
         </div>
     );

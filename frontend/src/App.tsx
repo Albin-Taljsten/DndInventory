@@ -6,6 +6,7 @@ import ProtectedRoute from './ui/components/protectedRoute';
 
 function App() {
     // AuthContext exists around the app right now
+
     return (
         <BrowserRouter>
             <Routes>

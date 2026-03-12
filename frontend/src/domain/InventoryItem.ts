@@ -8,6 +8,7 @@ export class InventoryItem {
 
     private _name: string;
     private _description: string;
+    private _imgUrl: string;
     private _shape: Shape;
 
     constructor(id: number, itemId: string) {
@@ -24,6 +25,7 @@ export class InventoryItem {
 
         this._name = config.name;
         this._description = config.description;
+        this._imgUrl = config.imgUrl;
         this._shape = config.shape;
     }
 
@@ -33,5 +35,6 @@ export class InventoryItem {
 
     get name() { return this._name; }
     get description() { return this._description }
+    get imgUrl() { return this._imgUrl }
     get shape() { return this._shape; }
 }

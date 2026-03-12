@@ -1,10 +1,11 @@
 import type { Inventory } from "./domain/Inventory";
 
 export const HOST = "localhost";
-export const PORT = 3000;
+export const PORT = 5000;
 
 export let GRID_WIDTH: number = 5;
 export let GRID_HEIGHT: number = 10;
+export const CELL_SIZE = 96;
 
 export function setGRID_WIDTH(value: number, inventory: Inventory) {
     GRID_WIDTH = value;

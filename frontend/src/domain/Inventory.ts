@@ -125,11 +125,14 @@ export class Inventory {
 
         const { item, occupiedCells } = placement;
 
-        if (!this.grid.canPlace(item, newOrigin)) {
+        this.grid.removeCells(occupiedCells);
+
+        const canMove = this.grid.canPlace(item, newOrigin);
+
+        if (!canMove) {
+            this.grid.place(item, placement.origin);
             return false;
         }
-
-        this.grid.removeCells(occupiedCells);
 
         this.grid.place(item, newOrigin);
 

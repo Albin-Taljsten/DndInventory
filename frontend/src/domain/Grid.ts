@@ -73,8 +73,10 @@ export class Grid {
                     return false;
                 }
 
+                const cell = this.getCell(newPoint(point.x + posX, point.y + posY))
+
                 // Checks that all cells are empty where the item is to be placed if not returns false
-                if (this.getCell(newPoint(point.x + posX, point.y + posY)).kind !== "empty") {
+                if (cell.kind !== "empty") {
                     return false;
                 }
             }

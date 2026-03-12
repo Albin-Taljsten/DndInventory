@@ -1,16 +1,17 @@
 .inventory-grid-wrapper {
+    position: relative;
     overflow-y: auto; // vertical scroll
     overflow-x: hidden; // optional: prevent horizontal scroll
-    width: calc(var(--inventory-cell-size) * var(--inventory-width));
     border: 1px solid #444; // optional: visual boundary
     padding: 0; // optional padding around grid
     box-sizing: content-box;
 }
 
 .inventory-grid {
+    position: relative;
     display: flex;
     flex-direction: column;
-    width: 100%;
+    width: calc(var(--inventory-cell-size) * var(--inventory-width));
 }
 
 .inventory-row {
@@ -20,18 +21,12 @@
 .cell {
     width: var(--inventory-cell-size);
     height: var(--inventory-cell-size);
-    border: 1px solid #000;
+
     display: flex;
     align-items: center;
     justify-content: center;
 
-    cursor: pointer;
-}
-
-.cell.empty {
-    background-color: var(--inventory-empty-color);
-}
-
-.cell.occupied {
-    background-color: var(--inventory-occupied-color);
+    background-image: url("/images/Tile.jpg");
+    background-size: cover;
+    background-position: center;
 }

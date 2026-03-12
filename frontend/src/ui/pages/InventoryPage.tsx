@@ -9,12 +9,14 @@ import { useEffect, useState } from "react";
 import { load } from "../components/save_load";
 import InventoryToolbar from "../components/InventoryToolbar";
 import "../../scss/components/InventoryButtons.scss";
+import ItemSelector from "../components/ItemSelector";
+import { ITEM_DATABASE as itemDB } from "../../domain/itemDB";
 
 const InventoryPage: React.FC = () => {
     const { inventory, grid, placements } = useInventory(GRID_WIDTH, GRID_HEIGHT);
     const { userId, setUserId } = useAuth();
 
-    const [mode, setMode] = useState<"add" | "remove" | "move">("add");
+    const [mode, setMode] = useState<"none" | "remove">("none");
 
     useEffect(() => {
         if (userId) load(userId, inventory);
@@ -40,17 +42,37 @@ const InventoryPage: React.FC = () => {
                 <InventoryToolbar mode={mode} setMode={setMode} />
             </div>
 
-            <div
-                className="inventory-grid-wrapper"
-                style={{
-                    height: "500px"
-                }}
-            >
-                {/* InventoryGrid */}
-                <InventoryGrid grid={grid} inventory={inventory} placements={placements} mode={mode}/>
+            <div className="inventory-layout">
+                {/* LEFT COLUMN */}
+                <div className="inventory-column">
+                    <div className="inventory-panel">
+                        <ItemSelector items={Object.keys(itemDB)}/>
+                    </div>
+                </div>
+
+                {/* CENTER COLUMN */}
+                <div className="inventory-column">
+                    <div
+                        className="inventory-grid-wrapper"
+                        style={{
+                            height: "500px"
+                        }}
+                    >
+                        {/* InventoryGrid */}
+                        <InventoryGrid grid={grid} inventory={inventory} placements={placements} mode={mode}/>
+                    </div>
+                </div>
+
+                {/* RIGHT COLUMN */}
+                <div className="inventory-column">
+                    <div className="inventory-panel">
+                        <h3>Item Info</h3>
+                        <p>Select an item to see details.</p>
+                    </div>
+                </div>
             </div>
         </div>
-    )
+    );
 }
 
 export default InventoryPage;
