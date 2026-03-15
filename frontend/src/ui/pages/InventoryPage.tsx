@@ -2,15 +2,15 @@ import { useInventory } from "../../hooks/useInventory";
 import InventoryGrid from "../components/InventoryGrid";
 import "../../scss/layouts/InventoryPage.scss";
 import { GRID_HEIGHT, GRID_WIDTH } from "../../globalVariables";
-import SaveInventoryButton from "../components/SaveInventoryButton";
 import LoadInventoryButton from "../components/LoadInventoryButton";
 import { useAuth } from "../context/AuthContext";
 import { useEffect, useState } from "react";
-import { load } from "../components/save_load";
+import { load, save } from "../components/save_load";
 import InventoryToolbar from "../components/InventoryToolbar";
 import "../../scss/components/InventoryButtons.scss";
 import ItemSelector from "../components/ItemSelector";
-import { ITEM_DATABASE as itemDB } from "../../domain/itemDB";
+import { ITEM_DATABASE as itemDB, type ItemConfig } from "../../domain/itemDB";
+import ItemInfo from "../components/ItemInfo";
 
 const InventoryPage: React.FC = () => {
     const { inventory, grid, placements } = useInventory(GRID_WIDTH, GRID_HEIGHT);
@@ -18,9 +18,26 @@ const InventoryPage: React.FC = () => {
 
     const [mode, setMode] = useState<"none" | "remove">("none");
 
+    const [selectedItem, setSelectedItem] = useState<ItemConfig | null>(null);
+
     useEffect(() => {
         if (userId) load(userId, inventory);
     }, [userId]);
+
+    useEffect(() => {
+        if (!userId) return;
+
+        const timeout = setTimeout(async () => {
+            try {
+                await save(userId, inventory.serialize(), GRID_WIDTH, GRID_HEIGHT);
+                console.log("Inventory auto-saved");
+            } catch (err) {
+                console.error("Auto-save failed", err);
+            }
+        }, 500);
+
+        return () => clearTimeout(timeout);
+    }, [placements, userId]);
 
     if (userId === null) {
         return (
@@ -34,7 +51,6 @@ const InventoryPage: React.FC = () => {
             
             {/* Save / Load buttons */}
             <div className="inventory-button-wrapper">
-                <SaveInventoryButton inventory={inventory} userId={userId} />
                 <LoadInventoryButton inventory={inventory} userId={userId} />
                 <button className="btn btn--sm" onClick={() => setUserId(null)}>Logout</button>
 
@@ -46,7 +62,7 @@ const InventoryPage: React.FC = () => {
                 {/* LEFT COLUMN */}
                 <div className="inventory-column">
                     <div className="inventory-panel">
-                        <ItemSelector items={Object.keys(itemDB)}/>
+                        <ItemSelector items={itemDB}/>
                     </div>
                 </div>
 
@@ -59,15 +75,21 @@ const InventoryPage: React.FC = () => {
                         }}
                     >
                         {/* InventoryGrid */}
-                        <InventoryGrid grid={grid} inventory={inventory} placements={placements} mode={mode}/>
+                        <InventoryGrid 
+                            grid={grid} 
+                            inventory={inventory} 
+                            placements={placements} 
+                            mode={mode}
+                            onItemInspect={(itemKey) => setSelectedItem(itemDB[itemKey])}
+                        />
                     </div>
                 </div>
 
                 {/* RIGHT COLUMN */}
                 <div className="inventory-column">
                     <div className="inventory-panel">
-                        <h3>Item Info</h3>
-                        <p>Select an item to see details.</p>
+                        <h2>Item Viewer</h2>
+                        <ItemInfo item={selectedItem} />
                     </div>
                 </div>
             </div>

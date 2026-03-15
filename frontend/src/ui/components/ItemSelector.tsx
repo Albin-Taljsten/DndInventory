@@ -1,14 +1,18 @@
 import { useState } from "react";
+import type { ItemDB } from "../../domain/itemDB";
+import "../../scss/components/ItemSelector.scss";
 
 interface Props {
-    items: string[]; // ItemDB.ts keys
+    items: ItemDB; // ItemDB.ts keys
 }
 
 const ItemSelector: React.FC<Props> = ({ items }) => {
     const [search, setSearch] = useState("");
 
-    const filtered = items.filter(i => 
-        i.toLowerCase().includes(search.toLowerCase())
+    const entries = Object.entries(items);
+
+    const filtered = entries.filter(([key, item]) => 
+        item.name.toLowerCase().includes(search.toLowerCase())
     );
 
     const handleDragStart = (e: React.DragEvent, itemKey: string) => {
@@ -24,17 +28,20 @@ const ItemSelector: React.FC<Props> = ({ items }) => {
                 onChange={e => setSearch(e.target.value)}
             />
 
-            <div className="item-selector-grid">
-                {filtered.map(item => (
-                    <div
-                        key={item}
-                        className="selector-item"
-                        draggable
-                        onDragStart={(e) => handleDragStart(e, item)}
-                    >
-                        {item}
-                    </div>
-                ))}
+            <div className="item-selector-scroll">
+                <div className="item-selector-grid">
+                    {filtered.map(([key, item]) => (
+                        <div
+                            key={key}
+                            className="selector-item"
+                            draggable
+                            onDragStart={(e) => handleDragStart(e, key)}
+                        >
+                            <img src={item.imgUrl} alt={item.name} />
+                            <span>{item.name}</span>
+                        </div>
+                    ))}
+                </div>
             </div>
         </div>
     );

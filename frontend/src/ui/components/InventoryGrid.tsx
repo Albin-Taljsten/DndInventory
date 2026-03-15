@@ -10,9 +10,10 @@ interface InventoryGridProps {
     inventory: Inventory;
     placements: PlacedItem[];
     mode: "none" | "remove";
+    onItemInspect: (itemKey: string) => void;
 }
 
-const InventoryGrid: React.FC<InventoryGridProps> = ({ grid, inventory, placements, mode }) => {
+const InventoryGrid: React.FC<InventoryGridProps> = ({ grid, inventory, placements, mode, onItemInspect }) => {
     //Use states, refs and constants/variables
     const gridRef = useRef<HTMLDivElement>(null);
 
@@ -31,13 +32,14 @@ const InventoryGrid: React.FC<InventoryGridProps> = ({ grid, inventory, placemen
     }
 
     /* Used when moving an item in the grid to a new place in the grid */
-    const handleMouseDown = (placement: PlacedItem, e: React.MouseEvent) => {
+    const handleMouseDown = (placement: PlacedItem, cellX: number, cellY: number, e: React.MouseEvent) => {
         if (mode !== "none") return;
         e.stopPropagation();
 
         const rect = e.currentTarget.getBoundingClientRect();
-        const offsetX = e.clientX - rect.left;
-        const offsetY = e.clientY - rect.top;
+        // Offset from exact click point
+        const offsetX = e.clientX - rect.left + cellX * CELL_SIZE;
+        const offsetY = e.clientY - rect.top + cellY * CELL_SIZE;
 
         setDragging({ id: placement.item.id, offsetX, offsetY });
         setDragPos({ x: e.clientX - offsetX, y: e.clientY - offsetY });
@@ -71,8 +73,9 @@ const InventoryGrid: React.FC<InventoryGridProps> = ({ grid, inventory, placemen
     };
 
     /**
-    * Used when an item is dropped to the grid from outside the grid instance. Ex: From the item selector 
-    * also used when adding an item to the inventory
+    * Used when an item is dropped to the grid from outside the grid instance. Ex: From the item selector
+    * 
+    * Also used when adding an item to the inventory
     * @param e The drag event that happens when someone drags something into the grid
     */
     const handleDrop = (e: React.DragEvent) => {
@@ -81,6 +84,7 @@ const InventoryGrid: React.FC<InventoryGridProps> = ({ grid, inventory, placemen
         if (!gridRef.current) return;
 
         const itemKey = e.dataTransfer.getData("itemKey");
+
         if (!itemKey) return;
 
         const gridRect = gridRef.current.getBoundingClientRect();
@@ -132,8 +136,15 @@ const InventoryGrid: React.FC<InventoryGridProps> = ({ grid, inventory, placemen
                             key={placement.item.id}
                             placement={placement}
                             mode={mode}
-                            onClick={() => handleRemove(placement.item.id)}
-                            onMouseDown={(e) => handleMouseDown(placement, e)}
+                            onClick={(_, __, e) => {
+                                if (e.ctrlKey) {
+                                    onItemInspect(placement.item.itemId);
+                                    return;
+                                }
+
+                                handleRemove(placement.item.id)
+                            }}
+                            onMouseDown={handleMouseDown}
                             styleOverride={styleOverride}
                         />
                     );

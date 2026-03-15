@@ -1,0 +1,16 @@
+.item-selector {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.item-selector-scroll {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.item-selector-grid {
+    display: grid;
+    gap: 8px;
+    padding: 8px;
+}

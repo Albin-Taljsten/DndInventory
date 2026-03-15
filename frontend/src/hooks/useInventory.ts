@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Inventory } from "../domain/Inventory";
 import type { PlacedItem } from "../domain/Types";
 
-export function useInventory(width: number, height: number) {
+export function useInventory(width: number, height: number, externalListener?: (inv: Inventory) => void) {
     const inventoryRef = useRef<Inventory | null>(null);
 
     if (inventoryRef.current === null) {
@@ -20,11 +20,18 @@ export function useInventory(width: number, height: number) {
     useEffect(() => {
         const inventory = inventoryRef.current!;
 
-        return inventory.subscribe(inv => {
+
+        const unsubscribe = inventory.subscribe(inv => {
             setGrid(inv.getGridSnapshot());
             setPlacements(inv.getPlacements());
+
+            if (externalListener) {
+                externalListener(inv);
+            }
         });
-    }, []);
+
+        return unsubscribe;
+    }, [externalListener]);
 
     return {
         inventory: inventoryRef.current!,
