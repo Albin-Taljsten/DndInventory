@@ -1,11 +1,26 @@
 .inventory-page {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
+    display: grid;
+
+    grid-template-columns: minmax(0,1fr) auto minmax(0,1fr);
+    grid-template-rows: auto 1fr;
+
+    grid-template-areas:
+        "top-left title top-right"
+        "selector grid viewer";
+
+    width: 100vw;
     height: 100vh;
+
     background-color: #606060;
-    justify-content: center;
-    align-items: center;
+    gap: 2rem;
+    padding: 2rem;
+
+    padding-left: 10vw;
+    padding-right: 10vw;
+
+    overflow: hidden;
+
+    box-sizing: border-box;
 }
 
 .inventory-title {
@@ -15,24 +30,7 @@
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     color: #f9f9f9;
     margin-bottom: 1rem;
-    margin-top: 1rem;
-}
-
-.inventory-layout {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 2rem;
-
-    width: 90%;
-    max-width: 1400px;
-
-    margin-top: 1rem;
-}
-
-.inventory-column {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    margin-top: 5vh;
 }
 
 .inventory-panel {
@@ -40,5 +38,58 @@
     padding: 1rem;
     border-radius: 0.5rem;
     width: 100%;
-    height: calc(500px - 2rem);
+    min-height: 0;
 }
+
+.inventory-title-wrapper {
+    grid-area: title;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.inventory-top-left {
+    grid-area: top-left;
+}
+
+.inventory-top-right {
+    grid-area: top-right;
+}
+
+.inventory-selector {
+    grid-area: selector;
+}
+
+.inventory-grid-container {
+    grid-area: grid;
+    height: 50vh;
+    min-width: 0;
+    min-height: 0;
+
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.inventory-viewer {
+    grid-area: viewer;
+}
+
+.inventory-selector,
+.inventory-viewer {
+    display: flex;
+}
+
+.inventory-selector .inventory-panel,
+.inventory-viewer .inventory-panel {
+    flex: 1;
+}
+
+.inventory-selector,
+.inventory-grid-container,
+.inventory-viewer {
+    height: 50vh;
+    min-width: 0;
+    min-height: 0;
+}
+

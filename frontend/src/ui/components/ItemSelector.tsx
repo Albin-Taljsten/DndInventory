@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { ItemDB } from "../../domain/itemDB";
 import "../../scss/components/ItemSelector.scss";
 import "../../scss/base/rarity.scss";
+import { CELL_SIZE } from "../../globalVariables";
 
 interface Props {
     items: ItemDB; // ItemDB.ts keys
@@ -12,7 +13,7 @@ const ItemSelector: React.FC<Props> = ({ items }) => {
 
     const entries = Object.entries(items);
 
-    const filtered = entries.filter(([key, item]) => 
+    const filtered = entries.filter(([_, item]) => 
         item.name.toLowerCase().includes(search.toLowerCase())
     );
 
@@ -35,14 +36,21 @@ const ItemSelector: React.FC<Props> = ({ items }) => {
                         <div
                             key={key}
                             className={`selector-item ${item.rarity?.class || ''}`}
-                            draggable
-                            onDragStart={(e) => handleDragStart(e, key)}
                         >
-                            <img src={item.imgUrl} alt={item.name} />
+                            <img 
+                                src={item.imgUrl} 
+                                alt={item.name} 
+                                style={{
+                                    width: item.shape.length*(CELL_SIZE - 32),
+                                    height: item.shape[0].length*(CELL_SIZE - 32)
+                                }}
+                                draggable
+                                onDragStart={(e) => handleDragStart(e, key)}
+                            />
                             <div className="selector-item-text">
                                 <h4>{item.name}</h4>
                                 <hr />
-                                <p>{item.description}</p>
+                                <p>{item.preview}</p>
                             </div>
                         </div>
                     ))}

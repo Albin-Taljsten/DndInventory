@@ -10,7 +10,7 @@ import InventoryToolbar from "../components/InventoryToolbar";
 import "../../scss/components/InventoryButtons.scss";
 import ItemSelector from "../components/ItemSelector";
 import { ITEM_DATABASE as itemDB, type ItemConfig } from "../../domain/itemDB";
-import ItemInfo from "../components/ItemInfo";
+import ItemInfo from "../components/ItemViewer";
 
 const InventoryPage: React.FC = () => {
     const { inventory, grid, placements } = useInventory(GRID_WIDTH, GRID_HEIGHT);
@@ -47,55 +47,53 @@ const InventoryPage: React.FC = () => {
 
     return (
         <div className="inventory-page">
-            <h1 className="inventory-title">My Inventory</h1>
             
-            {/* Save / Load buttons */}
-            <div className="inventory-button-wrapper">
-                <LoadInventoryButton inventory={inventory} userId={userId} />
-                <button className="btn btn--sm" onClick={() => setUserId(null)}>Logout</button>
-
-                {/* Inventory Toolbar */}
-                <InventoryToolbar mode={mode} setMode={setMode} />
+            <div className="inventory-top-left">
+                {/* Buttons or stats */}
             </div>
 
-            <div className="inventory-layout">
-                {/* LEFT COLUMN */}
-                <div className="inventory-column">
-                    <div className="inventory-panel">
-                        <ItemSelector items={itemDB}/>
-                    </div>
-                </div>
+            <div className="inventory-title-wrapper">
+                <h1 className="inventory-title">My Inventory</h1>
+                
+                {/* Save / Load buttons */}
+                <div className="inventory-button-wrapper">
+                    <LoadInventoryButton inventory={inventory} userId={userId} />
+                    <button className="btn btn--sm" onClick={() => setUserId(null)}>Logout</button>
 
-                {/* CENTER COLUMN */}
-                <div className="inventory-column">
-                    <div
-                        className="inventory-grid-wrapper"
-                        style={{
-                            height: "500px"
-                        }}
-                    >
-                        {/* InventoryGrid */}
-                        <InventoryGrid 
-                            grid={grid} 
-                            inventory={inventory} 
-                            placements={placements} 
-                            mode={mode}
-                            onItemInspect={(itemKey) => setSelectedItem(itemDB[itemKey])}
-                        />
-                    </div>
-                </div>
-
-                {/* RIGHT COLUMN */}
-                <div className="inventory-column">
-                    <div className="inventory-panel">
-                        <div className="item-info-scroll">
-                            <h2 style={{ marginBottom: "0.5rem" }}>Item Viewer</h2>
-                            <ItemInfo item={selectedItem} />
-                        </div>
-                    </div>
+                    {/* Inventory Toolbar */}
+                    <InventoryToolbar mode={mode} setMode={setMode} />
                 </div>
             </div>
-        </div>
+
+            <div className="inventory-top-right">
+                {/* future buttons / equipment / gold / etc */}
+            </div>
+
+
+            <div className="inventory-selector">
+                <div className="inventory-panel">
+                    <ItemSelector items={itemDB}/>
+                </div>
+            </div>
+
+            <div className="inventory-grid-container">
+                <div className="inventory-grid-wrapper">
+                    <InventoryGrid 
+                        grid={grid} 
+                        inventory={inventory} 
+                        placements={placements} 
+                        mode={mode}
+                        onItemInspect={(itemKey) => setSelectedItem(itemDB[itemKey])}
+                    />
+                </div>
+            </div>
+
+            <div className="inventory-viewer">
+                <div className="inventory-panel">
+                    <ItemInfo item={selectedItem} />
+                </div>
+            </div>
+    </div>
     );
 }
 

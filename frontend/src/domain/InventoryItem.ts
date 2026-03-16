@@ -1,4 +1,4 @@
-import { ITEM_DATABASE } from "./itemDB";
+import { ITEM_DATABASE, type Rarity } from "./itemDB";
 import type { Shape } from "./Types";
 
 export class InventoryItem {
@@ -8,8 +8,11 @@ export class InventoryItem {
 
     private _name: string;
     private _description: string;
+    private _preview: string;
     private _imgUrl: string;
     private _shape: Shape;
+
+    private _rarity: Rarity;
 
     constructor(id: number, itemId: string) {
 
@@ -25,8 +28,11 @@ export class InventoryItem {
 
         this._name = config.name;
         this._description = config.description;
+        this._preview = config.preview;
         this._imgUrl = config.imgUrl;
         this._shape = config.shape;
+
+        this._rarity = config.rarity;
     }
 
     // Getters
@@ -34,7 +40,10 @@ export class InventoryItem {
     get itemId() { return this._itemId }
 
     get name() { return this._name; }
-    get description() { return this._description }
-    get imgUrl() { return this._imgUrl }
+    get description() { return this._description; }
+    get preview() { return this._preview; }
+    get imgUrl() { return this._imgUrl; }
     get shape() { return this._shape; }
+    
+    get rarity() { return this._rarity; }
 }

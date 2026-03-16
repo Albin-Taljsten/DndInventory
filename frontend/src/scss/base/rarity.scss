@@ -29,7 +29,10 @@ $purple: #800080;
 }
 
 .epic {
-
+    background-color: rgb(200, 30, 200);
+    border-color: $purple;
+    border-style: double;
+    border-width: 0.25rem;
 }
 
 .legendary {
@@ -40,6 +43,7 @@ $purple: #800080;
     position: relative; // required for pseudo-element
     border-radius: 0.5rem; // match your selector-item
     padding: 1rem;
+    isolation: isolate;
     
     background: linear-gradient(
         135deg,
