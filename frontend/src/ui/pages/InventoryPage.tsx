@@ -88,8 +88,10 @@ const InventoryPage: React.FC = () => {
                 {/* RIGHT COLUMN */}
                 <div className="inventory-column">
                     <div className="inventory-panel">
-                        <h2>Item Viewer</h2>
-                        <ItemInfo item={selectedItem} />
+                        <div className="item-info-scroll">
+                            <h2 style={{ marginBottom: "0.5rem" }}>Item Viewer</h2>
+                            <ItemInfo item={selectedItem} />
+                        </div>
                     </div>
                 </div>
             </div>

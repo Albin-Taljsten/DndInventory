@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { ItemDB } from "../../domain/itemDB";
 import "../../scss/components/ItemSelector.scss";
+import "../../scss/base/rarity.scss";
 
 interface Props {
     items: ItemDB; // ItemDB.ts keys
@@ -33,12 +34,16 @@ const ItemSelector: React.FC<Props> = ({ items }) => {
                     {filtered.map(([key, item]) => (
                         <div
                             key={key}
-                            className="selector-item"
+                            className={`selector-item ${item.rarity?.class || ''}`}
                             draggable
                             onDragStart={(e) => handleDragStart(e, key)}
                         >
                             <img src={item.imgUrl} alt={item.name} />
-                            <span>{item.name}</span>
+                            <div className="selector-item-text">
+                                <h4>{item.name}</h4>
+                                <hr />
+                                <p>{item.description}</p>
+                            </div>
                         </div>
                     ))}
                 </div>

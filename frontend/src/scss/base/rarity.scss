@@ -1,0 +1,62 @@
+$yellow: #FFD700;
+$orange: #FFA500;
+$red: #FF4500;
+$purple: #800080;
+
+.trash {
+    background-color: #404040;
+    border-color: black;
+    border-style: dotted;
+    border-width: 0.25rem;
+}
+
+.common {
+    background-color: #606060;
+}
+
+.uncommon {
+    background-color: rgb(59, 162, 30);
+    border-color: rgb(34, 121, 9);
+    border-style: double;
+    border-width: 0.25rem;
+}
+
+.rare {
+    background-color: rgb(55, 93, 190);
+    border-color: rgb(15, 39, 89);
+    border-style: double;
+    border-width: 0.25rem;
+}
+
+.epic {
+
+}
+
+.legendary {
+
+}
+
+.artifact {
+    position: relative; // required for pseudo-element
+    border-radius: 0.5rem; // match your selector-item
+    padding: 1rem;
+    
+    background: linear-gradient(
+        135deg,
+        $yellow,
+        $orange,
+        $red,
+        $purple 
+    );
+
+    // Neon-style glow using box-shadow
+    box-shadow:
+        0 0 4px $yellow,
+        0 0 8px $orange,
+        0 0 12px $red,
+        0 0 16px $purple;
+}
+
+.unique {
+
+}

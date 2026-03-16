@@ -1,0 +1,14 @@
+.item-info {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    min-height: 0;
+}
+
+.item-info-scroll {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+}
